@@ -18,6 +18,9 @@ SERVER_ID = os.getenv("SERVER_ID")
 SEARCH_URL_TEMPLATE = "https://experience.pitt.edu/mobile_ws/v17/mobile_group_page_members?range=0&limit=10&order=&search_word={name}&param=35612&1721357427716"
 SIGN_ON_URL = "https://experience.pitt.edu/login_only?redirect=%2fweb_app%3fid%3d24043%26menu_id%3d59203%26if%3d0%26"
 
+
+# Checks if an active session cookie from the experience.pitt site is alr in the env file
+# and opens to the website and prompts the user to grab it if not
 cg_session_id = os.getenv("CG_SESSION_ID")
 if cg_session_id == "" or cg_session_id == None:
     print("Log in > right-click > Inspect > Application > Cookies> Copy CG.SessionID")
@@ -29,6 +32,7 @@ if cg_session_id == "" or cg_session_id == None:
 COOKIES = {"CG.SessionID": cg_session_id}
 
 
+# Checks if user details match those of a user within the CSC Campus Group
 async def validate_member(name, email) -> bool:
     search_url = SEARCH_URL_TEMPLATE.format(name=name)
 
@@ -45,6 +49,7 @@ async def validate_member(name, email) -> bool:
             print(err)
 
 
+# Collects proper credentials for Google Sheets API
 async def get_creds() -> Credentials:
     creds = None
 
@@ -63,6 +68,7 @@ async def get_creds() -> Credentials:
     return creds
 
 
+# Returns entire verification google sheet
 async def get_sheet() -> dict[any, any]:
     creds = await get_creds()
     try:
@@ -77,6 +83,7 @@ async def get_sheet() -> dict[any, any]:
         print(err)
 
 
+# Writes to a specified range of sheet with list of values
 async def write_to_sheet(values: list[str], range: str) -> dict[any, any]:
     creds = await get_creds()
     try:
@@ -101,12 +108,15 @@ async def write_to_sheet(values: list[str], range: str) -> dict[any, any]:
         print(err)
 
 
+# Prepares Discord Bot priveleges
 intents = discord.Intents.default()
 intents.guilds = True
 intents.members = True
 client = discord.Client(intents=intents)
 
 
+# Main method called by bot, checks all users against existing sheet, checks non-validatee users against the Campus Group,
+# adds 'verified' role to valid members with valid username
 @client.event
 async def on_ready():
     result = await get_sheet()
