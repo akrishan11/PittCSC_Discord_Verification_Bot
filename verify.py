@@ -13,7 +13,7 @@ import time
 import json
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SPREADSHEET_ID = "1xO05OklwSq1TbI6-TcVVbveD51j4qNKttVJqLs6QuUk"
+SPREADSHEET_ID = os.getenv("SPREADSHEET_ID")
 VERIFIED_ROLE_ID  = 1268228388074815568 
 SERVER_ID = 1267707765229359104
 SEARCH_URL_TEMPLATE = "https://experience.pitt.edu/mobile_ws/v17/mobile_group_page_members?range=0&limit=10&order=&search_word={name}&param=35612&1721357427716" 
