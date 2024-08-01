@@ -7,10 +7,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import gspread
-from dotenv import load_dotenv, set_key, dotenv_values
+from dotenv import load_dotenv, set_key
 import requests
 import time
-import sys
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
